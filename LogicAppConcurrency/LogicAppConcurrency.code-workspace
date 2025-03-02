@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "name": "Functions",
+      "path": "./Function"
+    },
+    {
+      "name": "LogicApp",
+      "path": "./LogicApp"
+    }
+  ],
+  "settings": {
+    "azurite.location": "C:\\Users\\cameron.mckay\\.azurelogicapps\\.azurite"
+  }
+}
