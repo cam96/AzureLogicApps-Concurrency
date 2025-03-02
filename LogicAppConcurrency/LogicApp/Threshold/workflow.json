@@ -136,36 +136,6 @@
                             ]
                         }
                     },
-                    "Condition_-_If_sum_is_10,_then_set_special_message": {
-                        "type": "If",
-                        "expression": {
-                            "and": [
-                                {
-                                    "equals": [
-                                        "@variables('Sum')",
-                                        10
-                                    ]
-                                }
-                            ]
-                        },
-                        "actions": {
-                            "Append_to_string_variable_-_Special_message": {
-                                "type": "AppendToStringVariable",
-                                "inputs": {
-                                    "name": "Special Message",
-                                    "value": "Special Message: We reached a sum of 10!"
-                                }
-                            }
-                        },
-                        "else": {
-                            "actions": {}
-                        },
-                        "runAfter": {
-                            "Compose_-_Sum": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
                     "Compose_-_Current_Item": {
                         "type": "Compose",
                         "inputs": "@items('For_each_-_Data_item')"
@@ -187,11 +157,6 @@
                     "Initialize_variable_-_Sum": [
                         "SUCCEEDED"
                     ]
-                },
-                "runtimeConfiguration": {
-                    "concurrency": {
-                        "repetitions": 1
-                    }
                 }
             },
             "Initialize_variable_-_Sum": {
@@ -242,8 +207,8 @@
                     }
                 },
                 "runAfter": {
-                    "For_each_-_Data_item": [
-                        "Succeeded"
+                    "Condition_-_If_sum_threshold_reached,_add_special_message": [
+                        "SUCCEEDED"
                     ]
                 }
             },
@@ -258,6 +223,42 @@
                     ]
                 },
                 "runAfter": {}
+            },
+            "Condition_-_If_sum_threshold_reached,_add_special_message": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "greater": [
+                                "@variables('Sum')",
+                                10
+                            ]
+                        },
+                        {
+                            "equals": [
+                                "@contains(variables('Special Message'), 'Special Message: We reached a sum of 10!')",
+                                "@false"
+                            ]
+                        }
+                    ]
+                },
+                "actions": {
+                    "Append_to_string_variable_-_Special_message": {
+                        "type": "AppendToStringVariable",
+                        "inputs": {
+                            "name": "Special Message",
+                            "value": "Special Message: We reached a sum of 10!"
+                        }
+                    }
+                },
+                "else": {
+                    "actions": {}
+                },
+                "runAfter": {
+                    "For_each_-_Data_item": [
+                        "Succeeded"
+                    ]
+                }
             }
         },
         "triggers": {
